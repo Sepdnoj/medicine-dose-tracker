@@ -3,6 +3,7 @@
     "name": "medicine-dose-tracker",
     "slug": "medicine-dose-tracker",
     "version": "1.0.0",
+    "scheme": "medicine-dose-tracker",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
