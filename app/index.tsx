@@ -6,7 +6,9 @@ import {
   View,
   StatusBar,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
+import { router } from 'expo-router';
 import { MEDICINES } from '../src/config/medicines';
 import { DoseLog } from '../src/components/DoseLog';
 import { LiveIndicator } from '../src/components/LiveIndicator';
@@ -104,6 +106,15 @@ export default function HomeScreen() {
           />
         </View>
 
+        {/* Torrent downloader link */}
+        <TouchableOpacity
+          style={styles.torrentLink}
+          onPress={() => router.push('/torrents')}
+        >
+          <Text style={styles.torrentLinkText}>Torrent Downloader</Text>
+          <Text style={styles.torrentLinkArrow}>{'>'}</Text>
+        </TouchableOpacity>
+
         {/* Safety disclaimer */}
         <View style={styles.disclaimer}>
           <Text style={styles.disclaimerText}>
@@ -163,6 +174,29 @@ const styles = StyleSheet.create({
     color: Colors.midGrey,
     textTransform: 'uppercase',
     letterSpacing: 0.6,
+  },
+  torrentLink: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: Colors.cardBg,
+    borderRadius: 14,
+    padding: Spacing.lg,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  torrentLinkText: {
+    fontSize: Typography.fontSize.base,
+    fontWeight: Typography.fontWeight.semibold,
+    color: '#2196F3',
+  },
+  torrentLinkArrow: {
+    fontSize: Typography.fontSize.lg,
+    color: '#2196F3',
+    fontWeight: Typography.fontWeight.bold,
   },
   disclaimer: {
     borderTopWidth: 1,
