@@ -10,6 +10,8 @@
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23F7F5F2'/><text y='68' x='50' text-anchor='middle' font-size='55'>💊</text></svg>">
 <title>Medicine Dose Tracker</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -84,30 +86,6 @@ if ('serviceWorker' in navigator) {
 }
 
 // ═══════════════════════════════════════════
-// STORAGE — localStorage with graceful fallback
-// ═══════════════════════════════════════════
-const SK = "med_tracker_doses";
-
-function save(data) {
-  try {
-    localStorage.setItem(SK, JSON.stringify(data));
-    showToast("✓ Saved");
-    return true;
-  } catch(e) {
-    showToast("⚠ Could not save");
-    return false;
-  }
-}
-
-function load() {
-  try {
-    const raw = localStorage.getItem(SK);
-    if (raw) { const parsed = JSON.parse(raw); if (Array.isArray(parsed)) return parsed; }
-  } catch(e) {}
-  return null;
-}
-
-// ═══════════════════════════════════════════
 // APP
 // ═══════════════════════════════════════════
 const MEDS = {
@@ -126,7 +104,53 @@ const INITIAL = [
   { id: "i8", med: "calpol",  t: "2026-03-21T14:30" },
 ];
 
-let state = { doses: load() || [...INITIAL], now: new Date(), live: true, adding: null, customTime: "" };
+let state = { doses: [...INITIAL], now: new Date(), live: true, adding: null, customTime: "" };
+
+// ═══════════════════════════════════════════
+// FIREBASE SETUP
+// ═══════════════════════════════════════════
+// 1. Go to https://console.firebase.google.com — create a free project
+// 2. Add a Web app (Project Settings → Add app → Web)
+// 3. Copy your config values below
+// 4. Create a Realtime Database (Build → Realtime Database → Create)
+//    Set rules to: { "rules": { ".read": true, ".write": true } }
+// ═══════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyBbt7OqK6gl0K3fHCMBPUJVe9n9awoEV6o",
+  authDomain: "medicine-dose-tracker-d16da.firebaseapp.com",
+  databaseURL: "https://medicine-dose-tracker-d16da-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "medicine-dose-tracker-d16da",
+  storageBucket: "medicine-dose-tracker-d16da.firebasestorage.app",
+  messagingSenderId: "372897045788",
+  appId: "1:372897045788:web:cb50a7ff5903c2fe216ed9"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const dosesRef = db.ref('doses');
+let firebaseReady = false;
+
+function save(data) {
+  dosesRef.set(data).then(() => {
+    showToast("✓ Saved");
+  }).catch(() => {
+    showToast("⚠ Could not save");
+  });
+}
+
+// Real-time listener — syncs across all devices
+dosesRef.on('value', (snapshot) => {
+  const data = snapshot.val();
+  if (data && Array.isArray(data)) {
+    state.doses = data;
+  } else if (!firebaseReady) {
+    // First load with no data — seed with initial doses
+    state.doses = [...INITIAL];
+    dosesRef.set(state.doses);
+  }
+  firebaseReady = true;
+  render();
+});
 
 function showToast(msg) {
   const t = document.getElementById('toast');
