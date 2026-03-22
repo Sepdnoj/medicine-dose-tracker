@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Doses">
+<meta name="theme-color" content="#F7F5F2">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23F7F5F2'/><text y='68' x='50' text-anchor='middle' font-size='55'>💊</text></svg>">
+<title>Medicine Dose Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #F7F5F2; color: #2D2A26; min-height: 100vh; min-height: 100dvh; padding: 20px 16px env(safe-area-inset-bottom, 40px); }
+  .container { max-width: 720px; margin: 0 auto; }
+  .card { background: #fff; border-radius: 14px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 16px; }
+  .mono { font-family: 'DM Mono', monospace; }
+  h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  h2 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+  .subtitle { font-size: 13px; color: #8A857E; margin-top: 2px; }
+  .header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .time-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; padding: 10px 14px; }
+  .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #3B8A4D; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+  .live-label { font-size: 11px; color: #3B8A4D; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  .btn-sm { border: 1px solid #D4CFC8; border-radius: 6px; padding: 4px 10px; background: transparent; font-size: 11px; cursor: pointer; color: #6B665F; font-family: 'DM Sans', sans-serif; }
+  .btn-live { border-color: #3B8A4D; background: #E8F5E9; color: #3B8A4D; font-weight: 600; }
+  .time-input { border: 1px solid #D4CFC8; border-radius: 6px; padding: 5px 8px; font-size: 13px; font-family: 'DM Mono', monospace; background: #fff; color: #2D2A26; flex: 1; min-width: 170px; }
+  .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .status-card { padding: 14px 16px; border-left: 4px solid; margin-bottom: 0; }
+  .status-card .med-name { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+  .status-card .info { font-size: 12px; color: #6B665F; line-height: 1.8; }
+  .status-card .info strong { color: #2D2A26; }
+  .badge { margin-top: 6px; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; display: inline-block; }
+  .badge-ok { background: #E8F5E9; color: #2E7D32; }
+  .badge-wait { background: #FFF3E0; color: #E65100; }
+  .timeline-track { position: relative; height: 44px; background: #F7F5F2; border-radius: 8px; overflow: hidden; margin-bottom: 4px; }
+  .timeline-label { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+  .track-window { position: absolute; top: 0; height: 100%; opacity: 0.5; }
+  .track-future { position: absolute; top: 0; right: 0; height: 100%; background: repeating-linear-gradient(135deg, transparent, transparent 3px, rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 6px); }
+  .hour-mark { position: absolute; top: 0; height: 100%; width: 1px; }
+  .now-line { position: absolute; top: 0; height: 100%; width: 2px; background: #2D2A26; z-index: 5; }
+  .dose-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 10; width: 20px; height: 20px; border-radius: 50%; border: 2px solid; }
+  .eligible-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 8; width: 20px; height: 20px; border-radius: 50%; border: 2px dashed; background: rgba(255,255,255,0.8); }
+  .time-axis { position: relative; height: 22px; margin-top: 4px; }
+  .time-axis span { position: absolute; transform: translateX(-50%); font-size: 9px; font-family: 'DM Mono', monospace; color: #AAA5A0; white-space: nowrap; }
+  .time-axis .midnight { color: #2D2A26; font-weight: 600; }
+  .time-axis .now-label { font-weight: 700; color: #2D2A26; font-family: 'DM Sans', sans-serif; }
+  .legend { display: flex; gap: 14px; margin-top: 14px; font-size: 10px; color: #8A857E; flex-wrap: wrap; align-items: center; }
+  .legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .add-buttons { display: flex; gap: 10px; }
+  .add-btn { flex: 1; padding: 12px; border-radius: 8px; border: 2px solid; font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .add-form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .add-form .med-label { font-weight: 600; font-size: 13px; }
+  .add-confirm { padding: 6px 14px; border-radius: 6px; border: none; color: #fff; font-weight: 600; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .add-cancel { padding: 6px 10px; border-radius: 6px; border: 1px solid #D4CFC8; background: transparent; color: #8A857E; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .dose-entry { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 13px; margin-bottom: 6px; }
+  .dose-entry .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dose-entry .time { font-family: 'DM Mono', monospace; font-size: 12px; min-width: 100px; }
+  .dose-entry .name { font-weight: 600; }
+  .dose-entry .window-tag { font-size: 10px; background: rgba(0,0,0,0.06); padding: 1px 6px; border-radius: 4px; color: #6B665F; }
+  .dose-entry .del { margin-left: auto; background: none; border: none; color: #CCC8C2; cursor: pointer; font-size: 18px; padding: 0 6px; }
+  .reset-btn { border: 1px solid #D4CFC8; border-radius: 6px; padding: 3px 10px; background: transparent; font-size: 10px; cursor: pointer; color: #8A857E; font-family: 'DM Sans', sans-serif; }
+  .disclaimer { font-size: 10px; color: #AAA5A0; text-align: center; margin-top: 16px; line-height: 1.5; padding-bottom: 20px; }
+  .flex-between { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .save-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #2D2A26; color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100; }
+  .save-toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="container" id="app"></div>
+<div class="save-toast" id="toast">✓ Saved</div>
+
+<script>
+// ═══════════════════════════════════════════
+// SERVICE WORKER REGISTRATION
+// ═══════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
+// ═══════════════════════════════════════════
+// STORAGE — localStorage with graceful fallback
+// ═══════════════════════════════════════════
+const SK = "med_tracker_doses";
+
+function save(data) {
+  try {
+    localStorage.setItem(SK, JSON.stringify(data));
+    showToast("✓ Saved");
+    return true;
+  } catch(e) {
+    showToast("⚠ Could not save");
+    return false;
+  }
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(SK);
+    if (raw) { const parsed = JSON.parse(raw); if (Array.isArray(parsed)) return parsed; }
+  } catch(e) {}
+  return null;
+}
+
+// ═══════════════════════════════════════════
+// APP
+// ═══════════════════════════════════════════
+const MEDS = {
+  calpol: { name: "Calpol", color: "#E05C6F", bg: "#FDE8EB", minGap: 4, max24: 4 },
+  nurofen: { name: "Nurofen", color: "#3B7DD8", bg: "#E3EEFB", minGap: 6, max24: 3 },
+};
+
+const INITIAL = [
+  { id: "i1", med: "calpol",  t: "2026-03-20T16:00" },
+  { id: "i2", med: "nurofen", t: "2026-03-20T17:30" },
+  { id: "i3", med: "calpol",  t: "2026-03-20T22:30" },
+  { id: "i4", med: "nurofen", t: "2026-03-21T02:30" },
+  { id: "i5", med: "calpol",  t: "2026-03-21T05:30" },
+  { id: "i6", med: "nurofen", t: "2026-03-21T09:00" },
+  { id: "i7", med: "calpol",  t: "2026-03-21T09:30" },
+  { id: "i8", med: "calpol",  t: "2026-03-21T14:30" },
+];
+
+let state = { doses: load() || [...INITIAL], now: new Date(), live: true, adding: null, customTime: "" };
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+function fmt(d) {
+  const dt = new Date(d); if (isNaN(dt)) return "—";
+  const day = dt.getDate();
+  const mon = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][dt.getMonth()];
+  return `${day} ${mon} ${String(dt.getHours()).padStart(2,"0")}:${String(dt.getMinutes()).padStart(2,"0")}`;
+}
+function fmtTime(d) { const dt = new Date(d); return `${String(dt.getHours()).padStart(2,"0")}:${String(dt.getMinutes()).padStart(2,"0")}`; }
+function fmtShortDate(d) { const dt = new Date(d); return `${["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][dt.getDay()]} ${dt.getDate()}/${dt.getMonth()+1}`; }
+function toInput(d) { const dt = new Date(d); return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}T${String(dt.getHours()).padStart(2,"0")}:${String(dt.getMinutes()).padStart(2,"0")}`; }
+function hrsAgo(now, t) { return ((new Date(now) - new Date(t)) / 3600000).toFixed(1); }
+
+function analyse(doses, now) {
+  const w24 = new Date(new Date(now).getTime() - 86400000);
+  const result = {};
+  for (const [k, m] of Object.entries(MEDS)) {
+    const all = doses.filter(d => d.med === k).sort((a,b) => new Date(a.t) - new Date(b.t));
+    const in24 = all.filter(d => new Date(d.t) >= w24 && new Date(d.t) <= new Date(now));
+    const last = all.filter(d => new Date(d.t) <= new Date(now)).slice(-1)[0];
+    const nextEl = last ? new Date(new Date(last.t).getTime() + m.minGap * 3600000) : new Date(now);
+    const rem = Math.max(0, m.max24 - in24.length);
+    let frees = null;
+    if (rem <= 0 && in24.length > 0) frees = new Date(new Date(in24[0].t).getTime() + 86400000);
+    result[k] = { in24, last, nextEl, rem, canNow: rem > 0 && (!last || nextEl <= new Date(now)), frees };
+  }
+  return result;
+}
+
+function render() {
+  const { doses, now, live, adding, customTime } = state;
+  const nowD = new Date(now);
+  const w24 = new Date(nowD.getTime() - 86400000);
+  const a = analyse(doses, now);
+
+  const earliest = doses.length > 0 ? new Date(Math.min(...doses.map(d => new Date(d.t).getTime()))) : w24;
+  const tlStart = new Date(Math.min(w24.getTime(), earliest.getTime() - 3600000));
+  const tlEnd = new Date(nowD.getTime() + 6 * 3600000);
+  const totalMs = tlEnd - tlStart;
+  const pos = (d) => Math.max(0, Math.min(100, ((new Date(d) - tlStart) / totalMs) * 100));
+
+  const hours = [];
+  const fh = new Date(tlStart); fh.setMinutes(0,0,0); fh.setHours(fh.getHours()+1);
+  for (let t = new Date(fh); t <= tlEnd; t = new Date(t.getTime() + 3600000)) hours.push(new Date(t));
+
+  let html = `
+    <div class="header"><span style="font-size:22px">💊</span><h1>Medicine Tracker</h1></div>
+    <p class="subtitle">Rolling 24hr · Calpol (max 4, every 4hrs) · Nurofen (max 3, every 6hrs)</p>
+    <div style="height:12px"></div>
+
+    <div class="card time-bar">
+      <span style="font-weight:600;color:#6B665F">🕐</span>
+      ${live ? `
+        <span class="mono" style="font-size:14px;font-weight:500">${fmt(now)}</span>
+        <span class="live-label"><span class="live-dot"></span> LIVE</span>
+        <button class="btn-sm" style="margin-left:auto" onclick="goManual()">Override time</button>
+      ` : `
+        <input type="datetime-local" class="time-input" value="${toInput(now)}" onchange="setTime(this.value)">
+        <button class="btn-sm btn-live" onclick="goLive()">● Go live</button>
+      `}
+    </div>
+
+    <div class="status-grid">
+      ${Object.entries(MEDS).map(([k, m]) => {
+        const s = a[k];
+        return `<div class="card status-card" style="border-left-color:${m.color}">
+          <div class="med-name" style="color:${m.color}">${m.name}</div>
+          <div class="info">
+            <div>In window: <strong>${s.in24.length}/${m.max24}</strong></div>
+            <div>Remaining: <strong style="color:${s.rem > 0 ? '#3B8A4D' : '#C4432B'}">${s.rem}</strong></div>
+            ${s.last ? `<div>Last: <strong class="mono" style="font-size:11px">${fmt(s.last.t)}</strong> <span style="color:#AAA5A0">(${hrsAgo(now, s.last.t)}h ago)</span></div>` : ''}
+            <div class="badge ${s.canNow ? 'badge-ok' : 'badge-wait'}">
+              ${s.canNow ? '✓ Can give now' : s.rem <= 0 ? `Max reached · frees ${s.frees ? fmt(s.frees) : '—'}` : `Next eligible: ${fmt(s.nextEl)}`}
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="card">
+      <h2>Rolling 24hr Timeline</h2>
+      ${Object.entries(MEDS).map(([k, m]) => {
+        const s = a[k];
+        const md = doses.filter(d => d.med === k);
+        return `<div style="margin-bottom:22px">
+          <div class="timeline-label" style="color:${m.color}">${m.name}</div>
+          <div class="timeline-track">
+            <div class="track-window" style="left:${pos(w24)}%;width:${pos(nowD)-pos(w24)}%;background:${m.bg}"></div>
+            <div class="track-future" style="left:${pos(nowD)}%"></div>
+            ${hours.map(h => `<div class="hour-mark" style="left:${pos(h)}%;background:rgba(0,0,0,${h.getHours()===0?0.15:0.05})"></div>`).join('')}
+            <div class="now-line" style="left:${pos(nowD)}%"></div>
+            ${md.map(d => {
+              const inW = new Date(d.t) >= w24 && new Date(d.t) <= nowD;
+              return `<div class="dose-dot" title="${m.name} — ${fmt(d.t)}" style="left:${pos(d.t)}%;background:${inW ? m.color : '#CCC8C2'};border-color:${inW ? m.color : '#B5B0A8'};${inW ? `box-shadow:0 0 0 3px ${m.bg}` : ''}"></div>`;
+            }).join('')}
+            ${s.nextEl > nowD && s.nextEl <= tlEnd && s.rem > 0 ? `<div class="eligible-dot" title="Eligible from ${fmt(s.nextEl)}" style="left:${pos(s.nextEl)}%;border-color:${m.color}"></div>` : ''}
+          </div>
+        </div>`;
+      }).join('')}
+      <div class="time-axis">
+        ${hours.filter((_,i) => i%3===0).map(h => `<span style="left:${pos(h)}%" class="${h.getHours()===0?'midnight':''}">${h.getHours()===0 ? fmtShortDate(h) : fmtTime(h)}</span>`).join('')}
+        <span class="now-label" style="left:${pos(nowD)}%">NOW</span>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#E05C6F"></span> In window</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#CCC8C2"></span> Outside</span>
+        <span class="legend-item"><span class="legend-dot" style="border:2px dashed #3B7DD8;width:8px;height:8px;box-sizing:border-box;background:transparent"></span> Next eligible</span>
+        <span>┃ Now</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex-between">
+        <h2 style="margin-bottom:0">Add Dose</h2>
+        <button class="reset-btn" onclick="resetDoses()">Reset to original</button>
+      </div>
+      ${!adding ? `
+        <div class="add-buttons">
+          ${Object.entries(MEDS).map(([k,m]) => `<button class="add-btn" style="border-color:${m.color};background:${m.bg};color:${m.color}" onclick="startAdd('${k}')">+ ${m.name}</button>`).join('')}
+        </div>
+      ` : `
+        <div class="add-form">
+          <span class="med-label" style="color:${MEDS[adding].color}">${MEDS[adding].name}</span>
+          <input type="datetime-local" class="time-input" style="font-size:12px;flex:unset;width:auto" value="${customTime}" onchange="state.customTime=this.value">
+          <button class="add-confirm" style="background:${MEDS[adding].color}" onclick="confirmAdd()">
+            ${customTime ? 'Add' : "Add at 'now'"}
+          </button>
+          <button class="add-cancel" onclick="cancelAdd()">Cancel</button>
+        </div>
+      `}
+    </div>
+
+    <div class="card">
+      <h2>Dose Log (${doses.length} doses)</h2>
+      ${[...doses].sort((a,b) => new Date(b.t) - new Date(a.t)).map(d => {
+        const m = MEDS[d.med];
+        const inW = new Date(d.t) >= w24 && new Date(d.t) <= nowD;
+        return `<div class="dose-entry" style="background:${inW ? m.bg : '#F7F5F2'}">
+          <div class="dot" style="background:${inW ? m.color : '#CCC8C2'}"></div>
+          <span class="time" style="color:${inW ? '#2D2A26' : '#AAA5A0'}">${fmt(d.t)}</span>
+          <span class="name" style="color:${inW ? m.color : '#AAA5A0'}">${m.name}</span>
+          ${inW ? '<span class="window-tag">in window</span>' : ''}
+          <button class="del" onclick="removeDose('${d.id}')">&times;</button>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <p class="disclaimer">⚠️ Not medical advice. Always follow your pharmacist/GP's guidance. Double-check all times and doses.</p>
+  `;
+
+  document.getElementById('app').innerHTML = html;
+}
+
+function goManual() { state.live = false; render(); }
+function goLive() { state.live = true; state.now = new Date(); render(); }
+function setTime(v) { state.live = false; state.now = new Date(v); render(); }
+function startAdd(med) { state.adding = med; state.customTime = ""; render(); }
+function cancelAdd() { state.adding = null; state.customTime = ""; render(); }
+function confirmAdd() {
+  const t = state.customTime || toInput(state.now);
+  state.doses.push({ id: 'd' + Date.now(), med: state.adding, t });
+  save(state.doses);
+  state.adding = null; state.customTime = "";
+  render();
+}
+function removeDose(id) {
+  if (!confirm("Remove this dose?")) return;
+  state.doses = state.doses.filter(d => d.id !== id);
+  save(state.doses);
+  render();
+}
+function resetDoses() {
+  if (!confirm("Reset to original 8 doses?")) return;
+  state.doses = [...INITIAL];
+  save(state.doses);
+  render();
+}
+
+setInterval(() => { if (state.live) { state.now = new Date(); render(); } }, 15000);
+render();
+</script>
+</body>
+</html>
