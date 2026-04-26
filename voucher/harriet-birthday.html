@@ -196,8 +196,26 @@
     margin-bottom: 4px;
   }
   @media print {
-    body { background: #fff; padding: 0; }
-    .voucher { box-shadow: none; border: 2px solid #c8102e; }
+    body { background: #fff; padding: 0; color: #000; }
+    .voucher {
+      background: #fff;
+      box-shadow: none;
+      border: 2px solid #000;
+      outline: 6px solid #000;
+      outline-offset: 4px;
+    }
+    .voucher::before { border-color: #000; }
+    .ribbon, .gift-line, .seat-label, .seat-sub, .meta, .signoff { color: #000; }
+    .stars, h1, .for-name span, .signoff strong { color: #000; }
+    .for-name, .seat-detail { color: #000; }
+    .show-card { background: #000; color: #fff; }
+    .show-card::after { border-color: #fff; }
+    .show-eyebrow { color: #fff; }
+    .show-title { color: #fff; }
+    .show-venue, .show-date { color: #fff; }
+    .show-time { color: #fff; }
+    .seat { background: #fff; border-color: #000; }
+    .meta { border-top-color: #000; }
   }
   @media (max-width: 520px) {
     .voucher { padding: 28px 20px; }
