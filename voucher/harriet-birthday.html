@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Harriet — Matilda The Musical</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    min-height: 100%;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #2a0a0e;
+    color: #1a0d0f;
+    padding: 32px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .voucher {
+    width: 100%;
+    max-width: 760px;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(255, 200, 90, 0.18), transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(255, 200, 90, 0.14), transparent 50%),
+      linear-gradient(160deg, #fdf6e9 0%, #f6e9c8 100%);
+    border-radius: 18px;
+    box-shadow:
+      0 0 0 1px rgba(180, 140, 60, 0.3),
+      0 0 0 8px #c8102e,
+      0 0 0 9px rgba(255, 215, 120, 0.6),
+      0 30px 60px rgba(0,0,0,0.45);
+    padding: 44px 48px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .voucher::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 1px dashed rgba(180, 140, 60, 0.5);
+    border-radius: 10px;
+    pointer-events: none;
+  }
+  .ribbon {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #8a5a1a;
+    margin-bottom: 6px;
+  }
+  .stars {
+    text-align: center;
+    color: #c8102e;
+    font-size: 18px;
+    letter-spacing: 6px;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: 56px;
+    text-align: center;
+    color: #c8102e;
+    line-height: 1.05;
+    margin-bottom: 8px;
+    text-shadow: 1px 1px 0 rgba(255, 215, 120, 0.6);
+  }
+  .for-name {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 28px;
+    text-align: center;
+    color: #1a0d0f;
+    margin-bottom: 28px;
+  }
+  .for-name span { color: #c8102e; }
+  .gift-line {
+    text-align: center;
+    font-size: 15px;
+    color: #5b3f1a;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .show-card {
+    background: #1a0d0f;
+    color: #fdf6e9;
+    border-radius: 10px;
+    padding: 28px 28px 24px;
+    text-align: center;
+    margin: 0 0 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .show-card::after {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(255, 215, 120, 0.4);
+    border-radius: 6px;
+    pointer-events: none;
+  }
+  .show-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 215, 120, 0.85);
+    margin-bottom: 10px;
+  }
+  .show-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: 40px;
+    color: #ffd778;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .show-venue {
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #fdf6e9;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .show-date {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fdf6e9;
+  }
+  .show-time {
+    font-size: 14px;
+    color: rgba(253, 246, 233, 0.75);
+    margin-top: 2px;
+  }
+  .seats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .seat {
+    background: #fff;
+    border: 1px solid rgba(180, 140, 60, 0.4);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .seat-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #8a5a1a;
+    margin-bottom: 4px;
+  }
+  .seat-detail {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 22px;
+    color: #1a0d0f;
+  }
+  .seat-sub {
+    font-size: 11px;
+    color: #6b4f2a;
+    margin-top: 2px;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed rgba(180, 140, 60, 0.5);
+    padding-top: 16px;
+    font-size: 11px;
+    color: #6b4f2a;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .signoff {
+    text-align: center;
+    margin-top: 22px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: #5b3f1a;
+  }
+  .signoff strong {
+    display: block;
+    font-style: normal;
+    font-weight: 800;
+    color: #c8102e;
+    font-size: 18px;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .voucher { box-shadow: none; border: 2px solid #c8102e; }
+  }
+  @media (max-width: 520px) {
+    .voucher { padding: 28px 20px; }
+    h1 { font-size: 40px; }
+    .show-title { font-size: 30px; }
+    .seats { grid-template-columns: 1fr; }
+    .meta { flex-direction: column; gap: 6px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+  <article class="voucher">
+    <div class="ribbon">A Birthday Gift</div>
+    <div class="stars">&#9733; &#9733; &#9733;</div>
+    <h1>Happy Birthday</h1>
+    <p class="for-name">to the wonderful <span>Harriet</span></p>
+
+    <p class="gift-line">
+      Wishing you a magical day &mdash; here is a little something to look<br>
+      forward to: a night at the theatre, just for you.
+    </p>
+
+    <section class="show-card">
+      <div class="show-eyebrow">Two tickets to</div>
+      <div class="show-title">Matilda The Musical</div>
+      <div class="show-venue">Birmingham Hippodrome &middot; Main Stage</div>
+      <div class="show-date">Tuesday 14 July 2026</div>
+      <div class="show-time">7:30 pm</div>
+    </section>
+
+    <div class="seats">
+      <div class="seat">
+        <div class="seat-label">Seat One</div>
+        <div class="seat-detail">Stalls &middot; Row A &middot; 8</div>
+        <div class="seat-sub">Standard admission</div>
+      </div>
+      <div class="seat">
+        <div class="seat-label">Seat Two</div>
+        <div class="seat-detail">Stalls &middot; Row A &middot; 9</div>
+        <div class="seat-sub">Standard admission</div>
+      </div>
+    </div>
+
+    <div class="meta">
+      <span>Order &#8470; 14803933</span>
+      <span>Booked 18 Apr 2026</span>
+    </div>
+
+    <p class="signoff">
+      <strong>Enjoy the show!</strong>
+      With all our love on your birthday &times;
+    </p>
+  </article>
+</body>
+</html>
