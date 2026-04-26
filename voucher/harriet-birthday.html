@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday Harriet — Matilda The Musical</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Caveat:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     min-height: 100%;
     font-family: 'Inter', system-ui, sans-serif;
-    background: #2a0a0e;
-    color: #1a0d0f;
+    background: #f4f1ea;
+    color: #000;
     padding: 32px 16px;
     display: flex;
     align-items: center;
@@ -19,17 +19,11 @@
   }
   .voucher {
     width: 100%;
-    max-width: 760px;
-    background:
-      radial-gradient(circle at 20% 0%, rgba(255, 200, 90, 0.18), transparent 50%),
-      radial-gradient(circle at 80% 100%, rgba(255, 200, 90, 0.14), transparent 50%),
-      linear-gradient(160deg, #fdf6e9 0%, #f6e9c8 100%);
-    border-radius: 18px;
-    box-shadow:
-      0 0 0 1px rgba(180, 140, 60, 0.3),
-      0 0 0 8px #c8102e,
-      0 0 0 9px rgba(255, 215, 120, 0.6),
-      0 30px 60px rgba(0,0,0,0.45);
+    max-width: 780px;
+    background: #fff;
+    border: 2px solid #000;
+    outline: 6px solid #000;
+    outline-offset: 4px;
     padding: 44px 48px 40px;
     position: relative;
     overflow: hidden;
@@ -38,104 +32,188 @@
     content: "";
     position: absolute;
     inset: 14px;
-    border: 1px dashed rgba(180, 140, 60, 0.5);
-    border-radius: 10px;
+    border: 1px dashed #000;
     pointer-events: none;
   }
+
+  /* Top decorative books */
+  .book-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 4px;
+    margin-bottom: 14px;
+  }
+  .book-row svg { display: block; }
+
   .ribbon {
     text-align: center;
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-size: 14px;
-    letter-spacing: 4px;
+    font-size: 13px;
+    letter-spacing: 5px;
     text-transform: uppercase;
-    color: #8a5a1a;
     margin-bottom: 6px;
   }
   .stars {
     text-align: center;
-    color: #c8102e;
-    font-size: 18px;
-    letter-spacing: 6px;
-    margin-bottom: 18px;
+    font-size: 16px;
+    letter-spacing: 8px;
+    margin-bottom: 14px;
   }
   h1 {
     font-family: 'Playfair Display', serif;
     font-weight: 800;
-    font-size: 56px;
+    font-size: 52px;
     text-align: center;
-    color: #c8102e;
     line-height: 1.05;
-    margin-bottom: 8px;
-    text-shadow: 1px 1px 0 rgba(255, 215, 120, 0.6);
+    margin-bottom: 6px;
   }
   .for-name {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 44px;
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 22px;
+  }
+
+  /* Scrabble-style MATILDA tiles */
+  .tiles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin: 18px 0 8px;
+    flex-wrap: wrap;
+  }
+  .tile {
+    width: 56px;
+    height: 60px;
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 6px;
+    box-shadow: 3px 3px 0 #000;
+    position: relative;
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .tile small {
+    position: absolute;
+    bottom: 4px;
+    right: 6px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+  }
+  .tile.t1 { transform: rotate(-6deg) translateY(-2px); }
+  .tile.t2 { transform: rotate(4deg); }
+  .tile.t3 { transform: rotate(-3deg) translateY(2px); }
+  .tile.t4 { transform: rotate(7deg) translateY(-3px); }
+  .tile.t5 { transform: rotate(-5deg); }
+  .tile.t6 { transform: rotate(3deg) translateY(2px); }
+  .tile.t7 { transform: rotate(-2deg) translateY(-1px); }
+  .tile-sub {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 22px;
+    text-align: center;
+    margin: 14px 0 4px;
+  }
+  .tile-musical {
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-weight: 600;
-    font-size: 28px;
+    font-size: 18px;
+    letter-spacing: 6px;
     text-align: center;
-    color: #1a0d0f;
-    margin-bottom: 28px;
+    text-transform: uppercase;
+    margin-bottom: 22px;
   }
-  .for-name span { color: #c8102e; }
+
+  /* Featured artwork strip */
+  .artwork {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 18px;
+    margin: 8px 0 22px;
+  }
+  .artwork svg { display: block; }
+
   .gift-line {
     text-align: center;
-    font-size: 15px;
-    color: #5b3f1a;
-    margin-bottom: 24px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
     line-height: 1.6;
+    margin-bottom: 24px;
   }
+
+  /* Show details: chalkboard-style inverted card */
   .show-card {
-    background: #1a0d0f;
-    color: #fdf6e9;
-    border-radius: 10px;
+    background: #000;
+    color: #fff;
+    border-radius: 8px;
     padding: 28px 28px 24px;
     text-align: center;
     margin: 0 0 24px;
     position: relative;
-    overflow: hidden;
   }
   .show-card::after {
     content: "";
     position: absolute;
     inset: 8px;
-    border: 1px solid rgba(255, 215, 120, 0.4);
-    border-radius: 6px;
+    border: 1px solid #fff;
+    border-radius: 4px;
     pointer-events: none;
   }
   .show-eyebrow {
     font-size: 11px;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    color: rgba(255, 215, 120, 0.85);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    font-family: 'Caveat', cursive;
+    letter-spacing: 2px;
+    font-size: 16px;
+    font-weight: 500;
   }
   .show-title {
     font-family: 'Playfair Display', serif;
     font-weight: 800;
-    font-size: 40px;
-    color: #ffd778;
+    font-size: 38px;
     line-height: 1;
-    margin-bottom: 14px;
+    margin-bottom: 6px;
+  }
+  .show-tag {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    margin-bottom: 16px;
+    opacity: 0.85;
   }
   .show-venue {
-    font-size: 14px;
-    letter-spacing: 1px;
-    color: #fdf6e9;
+    font-size: 13px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     margin-bottom: 18px;
   }
   .show-date {
-    font-size: 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
     font-weight: 600;
-    color: #fdf6e9;
   }
   .show-time {
     font-size: 14px;
-    color: rgba(253, 246, 233, 0.75);
     margin-top: 2px;
+    opacity: 0.85;
   }
+
   .seats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -144,103 +222,225 @@
   }
   .seat {
     background: #fff;
-    border: 1px solid rgba(180, 140, 60, 0.4);
-    border-radius: 8px;
+    border: 1.5px solid #000;
+    border-radius: 6px;
     padding: 14px 16px;
     text-align: center;
+    position: relative;
   }
   .seat-label {
     font-size: 10px;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    color: #8a5a1a;
     margin-bottom: 4px;
   }
   .seat-detail {
     font-family: 'Playfair Display', serif;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 22px;
-    color: #1a0d0f;
   }
   .seat-sub {
     font-size: 11px;
-    color: #6b4f2a;
     margin-top: 2px;
   }
+
+  .signed-block {
+    border-top: 1px dashed #000;
+    border-bottom: 1px dashed #000;
+    padding: 18px 0 22px;
+    margin: 20px 0 18px;
+    text-align: center;
+  }
+  .signed-eyebrow {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .signed-names {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.2;
+  }
+  .signed-names span {
+    display: inline-block;
+    margin: 0 6px;
+  }
+  .signed-names .n1 { transform: rotate(-3deg); }
+  .signed-names .n2 { transform: rotate(2deg); }
+  .signed-names .n3 { transform: rotate(-2deg); }
+  .signed-names .n4 { transform: rotate(4deg); }
+  .signed-names .n5 { transform: rotate(-1deg); }
+  .signed-names .n6 { transform: rotate(3deg); font-weight: 700; }
+  .signed-names .n7 { transform: rotate(-4deg); font-weight: 700; }
+
   .meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px dashed rgba(180, 140, 60, 0.5);
-    padding-top: 16px;
-    font-size: 11px;
-    color: #6b4f2a;
-    letter-spacing: 1px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
   }
+  .meta strong { font-weight: 700; }
+
   .signoff {
     text-align: center;
-    margin-top: 22px;
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 16px;
-    color: #5b3f1a;
+    margin-top: 16px;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 22px;
   }
-  .signoff strong {
-    display: block;
-    font-style: normal;
-    font-weight: 800;
-    color: #c8102e;
-    font-size: 18px;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
+
   @media print {
-    body { background: #fff; padding: 0; color: #000; }
-    .voucher {
-      background: #fff;
-      box-shadow: none;
-      border: 2px solid #000;
-      outline: 6px solid #000;
-      outline-offset: 4px;
-    }
-    .voucher::before { border-color: #000; }
-    .ribbon, .gift-line, .seat-label, .seat-sub, .meta, .signoff { color: #000; }
-    .stars, h1, .for-name span, .signoff strong { color: #000; }
-    .for-name, .seat-detail { color: #000; }
-    .show-card { background: #000; color: #fff; }
-    .show-card::after { border-color: #fff; }
-    .show-eyebrow { color: #fff; }
-    .show-title { color: #fff; }
-    .show-venue, .show-date { color: #fff; }
-    .show-time { color: #fff; }
-    .seat { background: #fff; border-color: #000; }
-    .meta { border-top-color: #000; }
+    body { background: #fff; padding: 0; }
+    .voucher { border: 2px solid #000; outline: 6px solid #000; }
   }
-  @media (max-width: 520px) {
-    .voucher { padding: 28px 20px; }
-    h1 { font-size: 40px; }
-    .show-title { font-size: 30px; }
+  @media (max-width: 560px) {
+    .voucher { padding: 28px 18px; }
+    h1 { font-size: 36px; }
+    .for-name { font-size: 32px; }
+    .tile { width: 42px; height: 46px; font-size: 26px; }
+    .show-title { font-size: 28px; }
     .seats { grid-template-columns: 1fr; }
+    .signed-names { font-size: 24px; }
     .meta { flex-direction: column; gap: 6px; text-align: center; }
   }
 </style>
 </head>
 <body>
   <article class="voucher">
-    <div class="ribbon">A Birthday Gift</div>
+
+    <!-- Stack of books along the top -->
+    <div class="book-row" aria-hidden="true">
+      <svg width="40" height="56" viewBox="0 0 40 56" fill="none" stroke="#000" stroke-width="2">
+        <rect x="3" y="8" width="34" height="44" rx="2" fill="#fff"/>
+        <line x1="3" y1="14" x2="37" y2="14"/>
+        <line x1="9" y1="22" x2="31" y2="22"/>
+        <line x1="9" y1="28" x2="28" y2="28"/>
+        <line x1="9" y1="34" x2="31" y2="34"/>
+        <line x1="9" y1="40" x2="26" y2="40"/>
+      </svg>
+      <svg width="56" height="44" viewBox="0 0 56 44" fill="none" stroke="#000" stroke-width="2">
+        <rect x="3" y="3" width="50" height="38" rx="2" fill="#000"/>
+        <rect x="7" y="7" width="42" height="30" rx="1" fill="none" stroke="#fff"/>
+        <text x="28" y="27" text-anchor="middle" font-family="Playfair Display, serif" font-weight="800" font-size="14" fill="#fff" font-style="italic">read</text>
+      </svg>
+      <svg width="32" height="60" viewBox="0 0 32 60" fill="none" stroke="#000" stroke-width="2">
+        <rect x="3" y="6" width="26" height="50" rx="2" fill="#fff"/>
+        <line x1="3" y1="14" x2="29" y2="14"/>
+        <line x1="3" y1="48" x2="29" y2="48"/>
+        <circle cx="16" cy="31" r="3" fill="#000"/>
+      </svg>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#000" stroke-width="2">
+        <rect x="3" y="6" width="42" height="38" rx="2" fill="#fff"/>
+        <line x1="3" y1="13" x2="45" y2="13"/>
+        <line x1="9" y1="22" x2="39" y2="22"/>
+        <line x1="9" y1="28" x2="36" y2="28"/>
+        <line x1="9" y1="34" x2="39" y2="34"/>
+      </svg>
+      <svg width="36" height="52" viewBox="0 0 36 52" fill="none" stroke="#000" stroke-width="2">
+        <rect x="3" y="4" width="30" height="46" rx="2" fill="#000"/>
+        <text x="18" y="30" text-anchor="middle" font-family="Playfair Display, serif" font-weight="800" font-size="11" fill="#fff">DAHL</text>
+      </svg>
+    </div>
+
+    <div class="ribbon">A Birthday Surprise</div>
     <div class="stars">&#9733; &#9733; &#9733;</div>
     <h1>Happy Birthday</h1>
-    <p class="for-name">to the wonderful <span>Harriet</span></p>
+    <p class="for-name">Harriet</p>
+
+    <!-- Matilda scrabble tiles -->
+    <div class="tiles" aria-label="MATILDA">
+      <div class="tile t1">M<small>3</small></div>
+      <div class="tile t2">A<small>1</small></div>
+      <div class="tile t3">T<small>1</small></div>
+      <div class="tile t4">I<small>1</small></div>
+      <div class="tile t5">L<small>1</small></div>
+      <div class="tile t6">D<small>2</small></div>
+      <div class="tile t7">A<small>1</small></div>
+    </div>
+    <div class="tile-musical">The Musical</div>
+    <div class="tile-sub">&mdash; she's a little bit naughty &mdash;</div>
+
+    <!-- Decorative artwork: girl with pigtails between bookends -->
+    <div class="artwork" aria-hidden="true">
+      <!-- Stack of books on the left -->
+      <svg width="90" height="80" viewBox="0 0 90 80" fill="none" stroke="#000" stroke-width="2">
+        <rect x="6" y="58" width="78" height="14" rx="1" fill="#fff"/>
+        <line x1="14" y1="65" x2="76" y2="65"/>
+        <rect x="14" y="42" width="62" height="14" rx="1" fill="#000"/>
+        <text x="45" y="53" text-anchor="middle" font-family="Playfair Display, serif" font-weight="800" font-size="9" fill="#fff" font-style="italic">stories</text>
+        <rect x="20" y="26" width="50" height="14" rx="1" fill="#fff"/>
+        <line x1="26" y1="33" x2="64" y2="33"/>
+        <rect x="26" y="10" width="38" height="14" rx="1" fill="#fff"/>
+        <line x1="32" y1="17" x2="58" y2="17"/>
+        <line x1="32" y1="20" x2="55" y2="20"/>
+      </svg>
+
+      <!-- Matilda silhouette with pigtails and a book -->
+      <svg width="120" height="160" viewBox="0 0 120 160" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Pigtail bows -->
+        <path d="M28 44 Q18 36 14 44 Q10 52 22 54 Z" fill="#000"/>
+        <path d="M92 44 Q102 36 106 44 Q110 52 98 54 Z" fill="#000"/>
+        <!-- Pigtails -->
+        <path d="M26 52 Q18 70 24 90" fill="none"/>
+        <path d="M22 56 Q14 76 20 92" fill="none"/>
+        <path d="M94 52 Q102 70 96 90" fill="none"/>
+        <path d="M98 56 Q106 76 100 92" fill="none"/>
+        <!-- Hair top -->
+        <path d="M34 44 Q40 24 60 22 Q80 24 86 44" fill="#000"/>
+        <!-- Face -->
+        <ellipse cx="60" cy="58" rx="22" ry="24" fill="#fff"/>
+        <!-- Fringe -->
+        <path d="M40 44 Q50 50 60 46 Q70 50 80 44" fill="#000"/>
+        <!-- Eyes -->
+        <circle cx="52" cy="60" r="2" fill="#000" stroke="none"/>
+        <circle cx="68" cy="60" r="2" fill="#000" stroke="none"/>
+        <!-- Smile -->
+        <path d="M52 70 Q60 76 68 70" fill="none"/>
+        <!-- Cheeks dots -->
+        <circle cx="46" cy="68" r="1" fill="#000" stroke="none"/>
+        <circle cx="74" cy="68" r="1" fill="#000" stroke="none"/>
+        <!-- Neck and dress -->
+        <path d="M52 82 L52 92 Q40 96 34 130 L86 130 Q80 96 68 92 L68 82 Z" fill="#000"/>
+        <!-- Collar -->
+        <path d="M52 92 L60 100 L68 92" fill="#fff" stroke="#000"/>
+        <!-- Open book in hands -->
+        <path d="M30 132 L60 138 L90 132 L90 152 L60 158 L30 152 Z" fill="#fff"/>
+        <line x1="60" y1="138" x2="60" y2="158"/>
+        <line x1="38" y1="142" x2="54" y2="146"/>
+        <line x1="38" y1="148" x2="52" y2="152"/>
+        <line x1="66" y1="146" x2="82" y2="142"/>
+        <line x1="68" y1="152" x2="82" y2="148"/>
+      </svg>
+
+      <!-- Stack of books on the right -->
+      <svg width="90" height="80" viewBox="0 0 90 80" fill="none" stroke="#000" stroke-width="2">
+        <rect x="14" y="10" width="40" height="14" rx="1" fill="#000"/>
+        <text x="34" y="21" text-anchor="middle" font-family="Playfair Display, serif" font-weight="800" font-size="9" fill="#fff">DREAM</text>
+        <rect x="10" y="26" width="60" height="14" rx="1" fill="#fff"/>
+        <line x1="16" y1="33" x2="64" y2="33"/>
+        <rect x="6" y="42" width="76" height="14" rx="1" fill="#fff"/>
+        <line x1="14" y1="49" x2="76" y2="49"/>
+        <rect x="10" y="58" width="68" height="14" rx="1" fill="#000"/>
+        <text x="44" y="69" text-anchor="middle" font-family="Playfair Display, serif" font-weight="800" font-size="9" fill="#fff" font-style="italic">read read read</text>
+      </svg>
+    </div>
 
     <p class="gift-line">
-      Wishing you a magical day &mdash; here is a little something to look<br>
-      forward to: a night at the theatre, just for you.
+      "Just because you find that life's not fair, it<br>
+      doesn't mean that you just have to grin and bear it."<br>
+      &mdash; here's a little something to celebrate <em>you</em> &mdash;
     </p>
 
     <section class="show-card">
-      <div class="show-eyebrow">Two tickets to</div>
+      <div class="show-eyebrow">your gift &middot; two tickets to</div>
       <div class="show-title">Matilda The Musical</div>
+      <div class="show-tag">Inspired by the Roald Dahl story</div>
       <div class="show-venue">Birmingham Hippodrome &middot; Main Stage</div>
       <div class="show-date">Tuesday 14 July 2026</div>
       <div class="show-time">7:30 pm</div>
@@ -259,15 +459,25 @@
       </div>
     </div>
 
-    <div class="meta">
-      <span>Order &#8470; 14803933</span>
-      <span>Booked 18 Apr 2026</span>
+    <div class="signed-block">
+      <div class="signed-eyebrow">With all our love &mdash; from</div>
+      <div class="signed-names">
+        <span class="n1">Rhys</span>&middot;
+        <span class="n2">Mez</span>&middot;
+        <span class="n3">Rhianne</span>&middot;
+        <span class="n4">Steve</span>&middot;
+        <span class="n5">Mel</span>&middot;
+        <span class="n6">Mum</span>&amp;
+        <span class="n7">Dad</span>
+      </div>
     </div>
 
-    <p class="signoff">
-      <strong>Enjoy the show!</strong>
-      With all our love on your birthday &times;
-    </p>
+    <div class="meta">
+      <span><strong>Order &#8470;</strong> 14803933</span>
+      <span><strong>Booked</strong> 18 Apr 2026</span>
+    </div>
+
+    <p class="signoff">Enjoy the show, birthday girl &times;</p>
   </article>
 </body>
 </html>
